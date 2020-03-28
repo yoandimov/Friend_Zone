@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/loginColor"
+    tools:context=".LoginActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="133dp"
+        android:gravity="center">
+        <ImageView
+             android:id="@+id/imageView"
+             android:layout_width="177dp"
+             android:layout_height="133dp"
+             android:src="@mipmap/ic_logo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="322dp"
+            android:layout_height="wrap_content"
+            android:hint="Email" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="322dp"
+            android:layout_height="wrap_content"
+            android:hint="Password" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/signIn"
+            android:layout_width="222dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarker"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Sign in" />
+
+        <TextView
+            android:id="@+id/createAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="New to Friend Zone? Click here"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/colorDarker" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
