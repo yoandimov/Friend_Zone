@@ -4,6 +4,7 @@
     <PreferenceCategory android:title="Settings">
         <CheckBoxPreference
             android:title="Stay Logged In"
+            android:key="checkbox_loggedIn"
             android:summary="Stay logged in after closing the application" />
 
     </PreferenceCategory>
