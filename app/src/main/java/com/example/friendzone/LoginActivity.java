@@ -3,9 +3,12 @@ package com.example.friendzone;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +22,12 @@ TextView createAccount;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Ce if fait en sorte que la "status bar" est transparente
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -37,12 +46,16 @@ TextView createAccount;
                 //Toast pour tester onCLick
                 Toast.makeText(LoginActivity.this, "Sign in", Toast.LENGTH_SHORT).show();
                 //Intent pour ouvrir activity Main
-                Intent intent = new Intent(this,MainActivity.class);
-                startActivity(intent);
+                Intent intentMain = new Intent(this,MainActivity.class);
+                startActivity(intentMain);
+                break;
 
             case R.id.createAccount:
                 //Toast pour tester onCLick
                 Toast.makeText(LoginActivity.this, "Create Account", Toast.LENGTH_SHORT).show();
+                Intent intentCreateAccount = new Intent(this,CreateAccountActivity.class);
+                startActivity(intentCreateAccount);
+                break;
         }
     }
 }
