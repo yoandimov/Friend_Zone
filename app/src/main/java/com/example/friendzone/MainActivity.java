@@ -10,10 +10,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.friendzone.Models.User;
+import com.example.friendzone.controller.ControllerUser;
 import com.google.android.material.navigation.NavigationView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -21,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
+    private ControllerUser controllerUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
 
         toggle.syncState();
+        controllerUser = new ControllerUser(Login.getAuthorization(this));
+        controllerUser.getUserInfo(userCallback);
     }
 
     /**
@@ -87,4 +97,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             addPreferencesFromResource(R.xml.settings_screen);
         }
     }
+
+    private Callback<User> userCallback = new Callback<User>() {
+        @Override
+        public void onResponse(Call<User> call, Response<User> response) {
+            if(response.isSuccessful()) {
+                User user = response.body();
+                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
+                Log.d("User", str);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<User> call, Throwable t) {
+
+        }
+    };
 }
