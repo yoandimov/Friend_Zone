@@ -13,10 +13,10 @@ import android.widget.EditText;
 
 import com.example.friendzone.Models.User;
 import com.example.friendzone.controller.ControllerLogin;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class CreateAccountActivity extends AppCompatActivity {
     private EditText username, password, confirmedPassword, email;
