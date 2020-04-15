@@ -33,8 +33,6 @@ public class CreatePostActivity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 1000;
     EditText caption, postContent;
     ImageView imageView;
-    String currentPhotoPath;
-
     Uri image_uri;
 
     private int PICK_IMAGE_REQUEST = 1;
@@ -80,10 +78,10 @@ public class CreatePostActivity extends AppCompatActivity {
 
     public void checkCameraPermission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checkSelfPermission(Manifest.permission.CAMERA) ==
-                    PackageManager.PERMISSION_DENIED ||
-                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                    PackageManager.PERMISSION_DENIED){
+                if(checkSelfPermission(Manifest.permission.CAMERA) ==
+                        PackageManager.PERMISSION_DENIED ||
+                        checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                                PackageManager.PERMISSION_DENIED){
                 //no permission...request permission
                 String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
                 requestPermissions(permission, PERMISSION_CODE);
