@@ -1,20 +1,30 @@
 package com.example.friendzone.Models;
 
+import androidx.annotation.NonNull;
+
+import java.util.Date;
 import java.util.List;
 
 public class Post {
-    private int postId;
+    private Integer postId;
     private int userId;
     private String PostUrl;
-    private String Caption;
+    private String Title;
+    private String Content;
+    private String CreationDate;
+
+    private String Image64;
+
     private List<Commentaire> PostCommentaires;
 
-    public Post(int postId, int userId, String postUrl, String caption, List<Commentaire> postCommentaires) {
-        this.postId = postId;
+    public Post(int userId, String postUrl, String title, String content, String image64,String postDate) {
         this.userId = userId;
         PostUrl = postUrl;
-        Caption = caption;
-        PostCommentaires = postCommentaires;
+        Title = title;
+        Content = content;
+        Image64 = image64;
+        CreationDate = postDate;
+
     }
 
     public int getPostId() {
@@ -41,12 +51,36 @@ public class Post {
         PostUrl = postUrl;
     }
 
-    public String getCaption() {
-        return Caption;
+    public String getImage64() {
+        return Image64;
     }
 
-    public void setCaption(String caption) {
-        Caption = caption;
+    public void setImage64(String image64) {
+        Image64 = image64;
+    }
+
+    public String getContent() {
+        return Content;
+    }
+
+    public void setContent(String content) {
+        Content = content;
+    }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    public String getCreationDate() {
+        return CreationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        CreationDate = creationDate;
     }
 
     public List<Commentaire> getPostCommentaires() {
@@ -55,5 +89,11 @@ public class Post {
 
     public void setPostCommentaires(List<Commentaire> postCommentaires) {
         PostCommentaires = postCommentaires;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Title: " + Title + " ;Content: " + Content + " ;Image: " + Image64 + " ;Data created: " + CreationDate;
     }
 }

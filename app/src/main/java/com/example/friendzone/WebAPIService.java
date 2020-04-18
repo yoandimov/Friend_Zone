@@ -1,5 +1,6 @@
 package com.example.friendzone;
 
+import com.example.friendzone.Models.Post;
 import com.example.friendzone.Models.User;
 
 import retrofit2.Call;
@@ -25,4 +26,7 @@ public interface WebAPIService {
 
     @POST("api/auth/signUp")
     Call<Boolean> SignUp(@Body User user);
+
+    @POST("api/post/create")
+    Call<Post> createPost(@Body Post post);
 }
