@@ -2,7 +2,6 @@ package com.example.friendzone.Models;
 
 import androidx.annotation.NonNull;
 
-import java.util.Date;
 import java.util.List;
 
 public class Post {
@@ -11,20 +10,19 @@ public class Post {
     private String PostUrl;
     private String Title;
     private String Content;
-    private String CreationDate;
+    private String DateCreated;
 
-    private String Image64;
+    private String Image;
 
     private List<Commentaire> PostCommentaires;
 
-    public Post(int userId, String postUrl, String title, String content, String image64,String postDate) {
+    public Post(int userId, String postUrl, String title, String content, String image, String postDate) {
         this.userId = userId;
         PostUrl = postUrl;
         Title = title;
         Content = content;
-        Image64 = image64;
-        CreationDate = postDate;
-
+        Image = image;
+        DateCreated = postDate;
     }
 
     public int getPostId() {
@@ -51,12 +49,12 @@ public class Post {
         PostUrl = postUrl;
     }
 
-    public String getImage64() {
-        return Image64;
+    public String getImage() {
+        return Image;
     }
 
-    public void setImage64(String image64) {
-        Image64 = image64;
+    public void setImage(String image) {
+        Image = image;
     }
 
     public String getContent() {
@@ -75,12 +73,12 @@ public class Post {
         Title = title;
     }
 
-    public String getCreationDate() {
-        return CreationDate;
+    public String getDateCreated() {
+        return DateCreated;
     }
 
-    public void setCreationDate(String creationDate) {
-        CreationDate = creationDate;
+    public void setDateCreated(String dateCreated) {
+        DateCreated = dateCreated;
     }
 
     public List<Commentaire> getPostCommentaires() {
@@ -94,6 +92,6 @@ public class Post {
     @NonNull
     @Override
     public String toString() {
-        return "Title: " + Title + " ;Content: " + Content + " ;Image: " + Image64 + " ;Data created: " + CreationDate;
+        return "Title: " + Title + " ;Content: " + Content + " ;Image: " + Image + " ;Data created: " + DateCreated;
     }
 }

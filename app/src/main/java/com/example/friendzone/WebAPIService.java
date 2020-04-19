@@ -3,6 +3,8 @@ package com.example.friendzone;
 import com.example.friendzone.Models.Post;
 import com.example.friendzone.Models.User;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Body;
@@ -29,4 +31,7 @@ public interface WebAPIService {
 
     @POST("api/post/create")
     Call<Post> createPost(@Body Post post);
+
+    @GET("api/post/getall")
+    Call<List<Post>> getAllPosts();
 }

@@ -1,11 +1,14 @@
 package com.example.friendzone.controller;
 
 import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
 import com.example.friendzone.WebAPIService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -22,4 +25,13 @@ public class ControllerPost {
         call.enqueue(postCallback);
     }
 
+    public void GetAllPosts(Callback<List<Post>> postCallback){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebAPIService webAPIService = retrofit.create(WebAPIService.class);
+        Call<List<Post>> call = webAPIService.getAllPosts();
+        call.enqueue(postCallback);
+    }
 }

@@ -3,12 +3,19 @@ package com.example.friendzone;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -17,9 +24,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.friendzone.Models.Post;
 import com.example.friendzone.Models.User;
+import com.example.friendzone.controller.ControllerPost;
 import com.example.friendzone.controller.ControllerUser;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,12 +44,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private ControllerUser controllerUser;
+    private RecyclerView recyclerView;
+    private List<Post> postList = new ArrayList<>();
+    private PostAdapter postAdapter;
+    private LinearLayoutManager linearLayoutManager;
+    private ControllerPost controllerPost;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        controllerUser = new ControllerUser(Login.getAuthorization(this));
+        controllerUser.getUserInfo(userCallback);
+
+
+        recyclerView = findViewById(R.id.postsRecyclerView);
+        Log.d("Recyc", "Recycler view found");
+        linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        Log.d("Recyc", "Adapter set");
+
+        controllerPost = new ControllerPost();
+        controllerPost.GetAllPosts(getAllPostsCallback);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,9 +86,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
 
         toggle.syncState();
-        controllerUser = new ControllerUser(Login.getAuthorization(this));
-        controllerUser.getUserInfo(userCallback);
+
+        registerReciever();
+
     }
+
+    private void registerReciever(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.example.friendzone.POSTS_UPDATED");
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                postAdapter = new PostAdapter(getApplicationContext(), postList);
+                recyclerView.setAdapter(postAdapter);
+                Log.d("PostResult", "Update broadcast recieved: "+postList.toString());
+            }
+        };
+        registerReceiver(receiver, filter);
+    }
+
+    Callback<List<Post>> getAllPostsCallback = new Callback<List<Post>>() {
+        @Override
+        public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+            if (!response.isSuccessful()) {
+                Log.d("PostResult", "onResponse: " + response.code());
+                return;
+            }
+            postList = response.body();
+
+            String broadcast = "com.example.friendzone.POSTS_UPDATED";
+            Intent sendPostUpdated = new Intent(broadcast);
+            sendBroadcast(sendPostUpdated);
+            Log.d("PostResult", "Update broadcast sent");
+        }
+
+        @Override
+        public void onFailure(Call<List<Post>> call, Throwable t) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+            alert.setTitle("Error");
+            alert.setMessage(t.getMessage());
+            alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(MainActivity.this, "Error displaying content", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    };
+
 
     /**
      * ANDROID BACK BUTTON ACTION
@@ -73,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * ACTIONS OF ITEMS IN THE MENU
+     *
      * @param menuItem
      * @return
      */
@@ -103,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Callback<User> userCallback = new Callback<User>() {
         @Override
         public void onResponse(Call<User> call, Response<User> response) {
-            if(response.isSuccessful()) {
+            if (response.isSuccessful()) {
                 User user = response.body();
                 String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
                 Log.d("User", str);
@@ -116,17 +195,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        controllerPost.GetAllPosts(getAllPostsCallback);
+    }
+
     //Ajoute option menu au toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater iinflater = getMenuInflater();
-        iinflater.inflate(R.menu.main_menu,menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.post:
                 Intent intent = new Intent(this, CreatePostActivity.class);
                 startActivity(intent);
@@ -134,4 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }
