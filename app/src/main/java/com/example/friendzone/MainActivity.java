@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.friendzone.Models.Post;
@@ -36,8 +37,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PostAdapter.OnPostClickListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -49,7 +49,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private PostAdapter postAdapter;
     private LinearLayoutManager linearLayoutManager;
     private ControllerPost controllerPost;
+    private AdapterView.OnItemClickListener listener;
 
+    public static final String EXTRA_POST_ID = "post_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +63,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         recyclerView = findViewById(R.id.postsRecyclerView);
-        Log.d("Recyc", "Recycler view found");
+
         linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        Log.d("Recyc", "Adapter set");
 
         controllerPost = new ControllerPost();
         controllerPost.GetAllPosts(getAllPostsCallback);
@@ -91,15 +92,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void registerReciever(){
+    private void registerReciever() {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.friendzone.POSTS_UPDATED");
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
+                postAdapter.setOnPostClickListener(MainActivity.this);
                 recyclerView.setAdapter(postAdapter);
-                Log.d("PostResult", "Update broadcast recieved: "+postList.toString());
+
             }
         };
         registerReceiver(receiver, filter);
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
             if (!response.isSuccessful()) {
-                Log.d("PostResult", "onResponse: " + response.code());
+
                 return;
             }
             postList = response.body();
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String broadcast = "com.example.friendzone.POSTS_UPDATED";
             Intent sendPostUpdated = new Intent(broadcast);
             sendBroadcast(sendPostUpdated);
-            Log.d("PostResult", "Update broadcast sent");
+
         }
 
         @Override
@@ -133,6 +135,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
     };
+
+    @Override
+    public void onPostClick(int id) {
+        postList.get(id);
+        Intent postDetailsIntent = new Intent(this, PostDetailsActivity.class);
+        Post clickedPost = postList.get(id);
+        if(clickedPost != null) {
+
+            postDetailsIntent.putExtra(EXTRA_POST_ID, clickedPost.getPostId());
+            startActivity(postDetailsIntent);
+        }
+    }
 
 
     /**
@@ -185,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (response.isSuccessful()) {
                 User user = response.body();
                 String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
-                Log.d("User", str);
+
             }
         }
 
@@ -221,7 +235,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }

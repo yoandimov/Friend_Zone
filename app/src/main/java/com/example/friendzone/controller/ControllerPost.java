@@ -15,13 +15,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ControllerPost {
     public static final String BASE_URL = "http://10.0.2.2:50764/";
 
-    public  void CreatePost(Callback<Post> postCallback, Post post){
+    public void CreatePost(Callback<Post> postCallback, Post post){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         WebAPIService webAPIService = retrofit.create(WebAPIService.class);
         Call<Post> call = webAPIService.createPost(post);
+        call.enqueue(postCallback);
+    }
+
+    public void GetPost(Callback<Post> postCallback, int id){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebAPIService webAPIService = retrofit.create(WebAPIService.class);
+        Call<Post> call = webAPIService.getPost(id);
         call.enqueue(postCallback);
     }
 

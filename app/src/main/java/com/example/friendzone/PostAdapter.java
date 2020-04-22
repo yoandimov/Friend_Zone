@@ -17,11 +17,19 @@ import com.example.friendzone.Models.Post;
 
 import java.util.List;
 
-
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     private Context mContext;
     private List<Post> mPostList;
+    private OnPostClickListener mListener;
+
+    public interface OnPostClickListener {
+        void onPostClick(int id);
+    }
+
+    public void setOnPostClickListener(OnPostClickListener listener) {
+        mListener = listener;
+    }
 
     public PostAdapter(Context context, List<Post> postList) {
         mPostList = postList;
@@ -33,37 +41,36 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
     public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.row_post, parent, false);
 
-
         return new PostHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
 
-            //int uid = mPostList.get(position).getUserId();
-            //int pid = mPostList.get(position).getPostId();
-            String pTitle = mPostList.get(position).getTitle();
-            String pTimeStamp = mPostList.get(position).getDateCreated();
-            String pContent = mPostList.get(position).getContent();
-            String pImage = mPostList.get(position).getImage();
-
+        //int uid = mPostList.get(position).getUserId();
+        //int pid = mPostList.get(position).getPostId();
+        String pTitle = mPostList.get(position).getTitle();
+        String pTimeStamp = mPostList.get(position).getDateCreated();
+        String pContent = mPostList.get(position).getContent();
+        String pImage = mPostList.get(position).getImage();
 
 
         holder.pTimeTv.setText(pTimeStamp);
-        if(pTitle != null){
+        if (pTitle != null) {
             holder.pTitleTv.setVisibility(View.VISIBLE);
             holder.pTitleTv.setText(pTitle);
         }
-        if(pContent != null){
+        if (pContent != null) {
             holder.pDescriptionTv.setVisibility(View.VISIBLE);
             holder.pDescriptionTv.setText(pContent);
         }
-        if(pImage != null){
+        if (pImage != null) {
             holder.pImageIv.setVisibility(View.VISIBLE);
             byte[] decodedString = Base64.decode(pImage, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.pImageIv.setImageBitmap(decodedByte);
         }
+
     }
 
     @Override
@@ -72,7 +79,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
     }
 
 
-    class PostHolder extends RecyclerView.ViewHolder{
+    class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView uPictureIv, pImageIv;
         TextView uNameTv, pTimeTv, pTitleTv, pDescriptionTv;
 
@@ -85,6 +92,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder>{
             pTimeTv = itemView.findViewById(R.id.pTimeTv);
             pTitleTv = itemView.findViewById(R.id.pTitleTv);
             pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onPostClick(position);
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
 }

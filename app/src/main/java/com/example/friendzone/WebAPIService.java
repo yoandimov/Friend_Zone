@@ -1,5 +1,6 @@
 package com.example.friendzone;
 
+import com.example.friendzone.Models.Commentaire;
 import com.example.friendzone.Models.Post;
 import com.example.friendzone.Models.User;
 
@@ -13,6 +14,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface WebAPIService {
     @FormUrlEncoded
@@ -31,6 +33,12 @@ public interface WebAPIService {
 
     @POST("api/post/create")
     Call<Post> createPost(@Body Post post);
+
+    @POST("api/commentaire/createcommentaire")
+    Call<Commentaire> CreateCommentaire(@Body Commentaire commentaire);
+
+    @GET ("api/post/get/{id}")
+    Call<Post> getPost(@Path("id")int id);
 
     @GET("api/post/getall")
     Call<List<Post>> getAllPosts();
