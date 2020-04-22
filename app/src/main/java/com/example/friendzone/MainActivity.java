@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -112,6 +113,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 User user = response.body();
                 String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
                 Log.d("User", str);
+                SharedPreferences.Editor prefs = getApplicationContext().getSharedPreferences
+                        ("currentUser", MODE_PRIVATE)
+                        .edit();
+
+                prefs.putInt("id", user.getUserId());
+                prefs.putString("firstname", user.getFirstName());
+                prefs.putString("username", user.getUsername());
+                prefs.putString("email", user.getEmail());
+                prefs.putString("password", user.getPassword());
+                prefs.apply();
             }
         }
 

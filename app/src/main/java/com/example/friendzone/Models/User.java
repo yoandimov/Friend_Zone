@@ -1,5 +1,10 @@
 package com.example.friendzone.Models;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+
 import java.util.List;
 
 public class User {
@@ -39,6 +44,20 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public static User getInstance(Context context) {
+        User user;
+
+        SharedPreferences prefs = context.getSharedPreferences("currentUser", Context.MODE_PRIVATE);
+        int id = prefs.getInt("id", 0);
+        String fname = prefs.getString("firstname", "");
+        String uname = prefs.getString("username", "");
+        String email = prefs.getString("email", "");
+        String psswd = prefs.getString("password", "");
+
+        user = new User(uname, psswd, email);
+        return user;
     }
 
     public int getUserId() {
