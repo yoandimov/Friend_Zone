@@ -25,7 +25,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private ControllerUser controllerUser;
     ImageView profilepic;
-    TextView username, post;
+    TextView username, firstname;
 
     private static final int PICK_IMAGE = 1;
     Uri imageUri;
@@ -37,7 +37,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         profilepic = (ImageView) findViewById(R.id.profile_picture);
         username = (TextView) findViewById(R.id.username);
-        post = (TextView) findViewById(R.id.post);
+        firstname = (TextView) findViewById(R.id.firstname);
 
         controllerUser = new ControllerUser(Login.getAuthorization(this));
         controllerUser.getUserInfo(userCallback);
