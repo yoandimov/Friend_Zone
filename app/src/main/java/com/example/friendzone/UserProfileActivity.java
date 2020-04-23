@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -75,7 +76,11 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
         currentUser = User.getInstance(this);
         username.setText("@" + currentUser.getUsername());
-        // profilepic.setImageBitmap(); // gets image from database
+
+
+        byte[] decodedString = Base64.decode(User.getInstance(this).getProfileImage(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        profilepic.setImageBitmap(decodedByte); // gets image from database
 
         controllerUser = new ControllerUser(Login.getAuthorization(this));
         controllerUser.GetPostsByUser(getPostsCallback);
