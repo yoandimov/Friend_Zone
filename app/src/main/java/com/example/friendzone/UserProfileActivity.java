@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
     private TextView username, fullname;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+    private Button btnEditProfile;
 
     // CONSTANTS
     private static final int PICK_IMAGE = 1;
@@ -60,10 +62,11 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        profilepic = (ImageView) findViewById(R.id.profile_picture);
-        username = (TextView) findViewById(R.id.username);
-        fullname = (TextView) findViewById(R.id.fullname);
+        profilepic = findViewById(R.id.profile_picture);
+        username = findViewById(R.id.username);
+        fullname = findViewById(R.id.fullname);
         recyclerView = findViewById(R.id.postsByUser);
+        btnEditProfile = findViewById(R.id.btnEdit);
 
         linearLayoutManager = new LinearLayoutManager(UserProfileActivity.this);
         linearLayoutManager.setStackFromEnd(true);
@@ -87,6 +90,13 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
                 gallery.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_IMAGE);
+            }
+        });
+
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(this,);
             }
         });
     }
