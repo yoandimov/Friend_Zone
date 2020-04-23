@@ -16,12 +16,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.example.friendzone.Models.User;
 import com.example.friendzone.controller.ControllerPost;
 import com.example.friendzone.controller.ControllerUser;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,8 +161,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else {
             super.onBackPressed();
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,7 +177,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.nav_profile:
+                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, UserProfileActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.nav_settings:
+                recyclerView.setVisibility(View.GONE);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsScreen())
                         .addToBackStack(null)
                         .commit();
@@ -200,6 +212,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 User user = response.body();
                 String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
 
+                SharedPreferences.Editor prefs = getApplicationContext().getSharedPreferences
+                        ("user", MODE_PRIVATE)
+                        .edit();
+
+                Gson gson = new Gson();
+                String json = gson.toJson(user);
+                prefs.putString("currentUser", json);
+                prefs.commit();
             }
         }
 

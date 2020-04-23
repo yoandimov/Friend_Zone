@@ -1,8 +1,11 @@
 package com.example.friendzone.controller;
 
 import com.example.friendzone.Login;
+import com.example.friendzone.Models.Post;
 import com.example.friendzone.Models.User;
 import com.example.friendzone.WebAPIService;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,5 +29,25 @@ public class ControllerUser {
         WebAPIService webAPIService = retrofit.create(WebAPIService.class);
         Call<User> call = webAPIService.getUser(this.auth);
         call.enqueue(userCallback);
+    }
+
+    public void GetPostsByUser(Callback<List<Post>> postCallback){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebAPIService webAPIService = retrofit.create(WebAPIService.class);
+        Call<List<Post>> call = webAPIService.getPostsByUser(this.auth);
+        call.enqueue(postCallback);
+    }
+
+    public void UpdateProfile(Callback<Boolean> booleanCallback, User user){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebAPIService webAPIService = retrofit.create(WebAPIService.class);
+        Call<Boolean> call = webAPIService.updateProfile(this.auth, user);
+        call.enqueue(booleanCallback);
     }
 }

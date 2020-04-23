@@ -42,4 +42,10 @@ public interface WebAPIService {
 
     @GET("api/post/getall")
     Call<List<Post>> getAllPosts();
+
+    @GET("api/user/getuserpost")
+    Call<List<Post>> getPostsByUser(@Header("Authorization") String auth);
+
+    @POST("api/user/updateprofile")
+    Call<Boolean> updateProfile(@Header("Authorization") String auth, @Body User user);
 }

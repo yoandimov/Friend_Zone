@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.friendzone.Models.Post;
+import com.example.friendzone.Models.User;
 import com.example.friendzone.controller.ControllerPost;
 
 import java.io.ByteArrayOutputStream;
@@ -67,6 +68,8 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
         getSupportActionBar().setTitle("Create a post");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        userId = User.getInstance(getApplicationContext()).getUserId();
         controllerPost = new ControllerPost();
 
         title = findViewById(R.id.title);
