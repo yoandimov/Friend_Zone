@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 public class Post {
-    private Integer postId;
-    private int userId;
+    private Integer PostId;
+    private int UserId;
     private String PostUrl;
     private String Title;
     private String Content;
@@ -17,7 +17,7 @@ public class Post {
     private List<Commentaire> PostCommentaires;
 
     public Post(int userId, String postUrl, String title, String content, String image, String postDate) {
-        this.userId = userId;
+        this.UserId = userId;
         PostUrl = postUrl;
         Title = title;
         Content = content;
@@ -26,19 +26,19 @@ public class Post {
     }
 
     public int getPostId() {
-        return postId;
+        return PostId;
     }
 
     public void setPostId(int postId) {
-        this.postId = postId;
+        this.PostId = postId;
     }
 
     public int getUserId() {
-        return userId;
+        return UserId;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.UserId = userId;
     }
 
     public String getPostUrl() {
