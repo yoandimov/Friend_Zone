@@ -47,8 +47,8 @@ public class User {
     }
 
     public static User getInstance(Context context) {
+        /*
         User user;
-
         SharedPreferences prefs = context.getSharedPreferences("currentUser", Context.MODE_PRIVATE);
         int id = prefs.getInt("id", 0);
         String fname = prefs.getString("firstname", "");
@@ -58,6 +58,15 @@ public class User {
 
         user = new User(uname, psswd, email);
         return user;
+         */
+
+        SharedPreferences prefs = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("currentUser", "");
+        User user = gson.fromJson(json, User.class);
+
+        return user;
+
     }
 
     public int getUserId() {

@@ -30,6 +30,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     Uri imageUri;
 
+    User currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,8 @@ public class UserProfileActivity extends AppCompatActivity {
         username = (TextView) findViewById(R.id.username);
         firstname = (TextView) findViewById(R.id.firstname);
 
-        controllerUser = new ControllerUser(Login.getAuthorization(this));
-        controllerUser.getUserInfo(userCallback);
+        currentUser = User.getInstance(this);
+        username.setText(currentUser.getUsername());
 
         profilepic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,21 +71,4 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         }
     }
-
-    private Callback<User> userCallback = new Callback<User>() {
-        @Override
-        public void onResponse(Call<User> call, Response<User> response) {
-            if(response.isSuccessful()) {
-                User user = response.body();
-                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
-                username.setText(user.getUsername());
-                Log.d("Userlog", str);
-            }
-        }
-
-        @Override
-        public void onFailure(Call<User> call, Throwable t) {
-
-        }
-    };
 }
