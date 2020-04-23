@@ -23,14 +23,16 @@ import retrofit2.Response;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private ControllerUser controllerUser;
-    ImageView profilepic;
-    TextView username, firstname;
+    // Widgets
+    private ImageView profilepic;
+    private TextView username, firstname;
 
+    // CONSTANTS
     private static final int PICK_IMAGE = 1;
-    Uri imageUri;
+    private Uri imageUri;
 
-    User currentUser;
+    // Objects
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
