@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +29,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,24 +39,21 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
     // Widgets
     private ImageView profilepic;
-    private TextView username, firstname;
+    private TextView username, fullname;
     private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
 
     // CONSTANTS
     private static final int PICK_IMAGE = 1;
-    private Uri imageUri;
 
     // Objects
     private User currentUser;
+    private Uri imageUri;
     private ControllerUser controllerUser;
     private List<Post> postList = new ArrayList<>();
     private PostAdapter postAdapter;
-
-    private LinearLayoutManager linearLayoutManager;
-
-    BroadcastReceiver receiver;
-
-    private String Image64 = null;
+    private BroadcastReceiver receiver;
+    private String Image64;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +62,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
         profilepic = (ImageView) findViewById(R.id.profile_picture);
         username = (TextView) findViewById(R.id.username);
-        firstname = (TextView) findViewById(R.id.fullname);
+        fullname = (TextView) findViewById(R.id.fullname);
         recyclerView = findViewById(R.id.postsByUser);
 
         linearLayoutManager = new LinearLayoutManager(UserProfileActivity.this);
@@ -77,6 +72,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
         currentUser = User.getInstance(this);
         username.setText("@" + currentUser.getUsername());
+        // profilepic.setImageBitmap(); // gets image from database
 
         controllerUser = new ControllerUser(Login.getAuthorization(this));
         controllerUser.GetPostsByUser(getPostsCallback);
