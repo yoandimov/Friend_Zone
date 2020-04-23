@@ -85,6 +85,7 @@ TextView createAccount;
                 Login login = response.body();
                 validateLogin(login);
             } else {
+                Log.d("code", "onResponse: " + response.body().getErrorDescription());
                 Log.d("code", String.valueOf(response.code()) + response.raw().message());
             }
 
