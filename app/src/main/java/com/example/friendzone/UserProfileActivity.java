@@ -42,7 +42,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
     // Widgets
     private ImageView profilepic;
-    private TextView username, fullname;
+    private TextView username, fullname, bio;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private Button btnEditProfile;
@@ -72,6 +72,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         fullname = findViewById(R.id.fullname);
         recyclerView = findViewById(R.id.postsByUser);
         btnEditProfile = findViewById(R.id.btnEdit);
+        bio = findViewById(R.id.bio);
 
         linearLayoutManager = new LinearLayoutManager(UserProfileActivity.this);
         linearLayoutManager.setStackFromEnd(true);
@@ -80,9 +81,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
         currentUser = User.getInstance(this);
 
-        username.setText("@" + currentUser.getUsername());
-        fullname.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
-
+        displayUserInfo();
 
         if (User.getInstance(this).getProfileImage() != null) {
             byte[] decodedString = Base64.decode(User.getInstance(this).getProfileImage(), Base64.DEFAULT);
@@ -115,6 +114,15 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         });
     }
 
+    public void displayUserInfo() {
+        username.setText("@" + currentUser.getUsername());
+        fullname.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+
+        if(currentUser.getDescription() != null) {
+            bio.setText(currentUser.getDescription());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -138,7 +146,6 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         if(requestCode == CODE && resultCode == RESULT_OK && data != null) {
             finish();
             startActivity(getIntent());
-            unregisterReceiver(receiver);
         }
     }
     private void registerReceiver() {
@@ -159,7 +166,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+        registerReceiver();
     }
 
     Callback<Boolean> getBoolCallback = new Callback<Boolean>() {

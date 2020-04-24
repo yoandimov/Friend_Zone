@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        unregisterReceiver(receiver);
+        registerReciever();
         controllerPost.GetAllPosts(getAllPostsCallback);
     }
 
