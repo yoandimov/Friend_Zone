@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         currentUser = User.getInstance(this);
 
-
         recyclerView = findViewById(R.id.postsRecyclerView);
 
         linearLayoutManager = new LinearLayoutManager(MainActivity.this);
