@@ -1,5 +1,6 @@
 package com.example.friendzone;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +60,9 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
     private BroadcastReceiver receiver;
     private String Image64;
 
+    public static final int CODE = 0;
+    public final static String RESPONSE = "response";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +80,16 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         recyclerView.setLayoutManager(linearLayoutManager);
 
         currentUser = User.getInstance(this);
+
         username.setText("@" + currentUser.getUsername());
+        fullname.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
 
 
-        byte[] decodedString = Base64.decode(User.getInstance(this).getProfileImage(), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        profilepic.setImageBitmap(decodedByte); // gets image from database
+        if (User.getInstance(this).getProfileImage() != null) {
+            byte[] decodedString = Base64.decode(User.getInstance(this).getProfileImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profilepic.setImageBitmap(decodedByte); // gets image from database
+        }
 
         controllerUser = new ControllerUser(Login.getAuthorization(this));
         controllerUser.GetPostsByUser(getPostsCallback);
@@ -101,7 +110,8 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(this,);
+                Intent intent = new Intent(UserProfileActivity.this, EditProfileActivity.class);
+                startActivityForResult(intent, CODE);
             }
         });
     }
@@ -125,7 +135,10 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+        }
+        if(requestCode == CODE && resultCode == RESULT_OK && data != null) {
+            finish();
+            startActivity(getIntent());
         }
     }
     private void registerReceiver() {
@@ -160,7 +173,6 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
         @Override
         public void onFailure(Call<Boolean> call, Throwable t) {
-
         }
     };
 
@@ -173,7 +185,6 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         @Override
         public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
             if (!response.isSuccessful()) {
-
                 return;
             }
             postList = response.body();
@@ -181,7 +192,6 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
             String broadcast = "com.example.friendzone.POSTS_BY_USER";
             Intent sendPostUpdated = new Intent(broadcast);
             sendBroadcast(sendPostUpdated);
-
         }
 
         @Override
