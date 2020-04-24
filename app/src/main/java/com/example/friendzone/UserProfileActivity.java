@@ -138,6 +138,7 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
         if(requestCode == CODE && resultCode == RESULT_OK && data != null) {
             finish();
             startActivity(getIntent());
+            unregisterReceiver(receiver);
         }
     }
     private void registerReceiver() {

@@ -42,6 +42,10 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity
+            android:name=".PostDetailsActivity">
+
+        </activity>
     </application>
 
 </manifest>

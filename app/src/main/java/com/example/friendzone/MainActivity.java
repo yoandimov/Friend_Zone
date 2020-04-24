@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ControllerPost controllerPost;
     private AdapterView.OnItemClickListener listener;
     private User currentUser;
+    private BroadcastReceiver receiver;
 
     public static final String EXTRA_POST_ID = "post_id";
 
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void registerReciever() {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.friendzone.POSTS_UPDATED");
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
@@ -255,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-
+        unregisterReceiver(receiver);
         controllerPost.GetAllPosts(getAllPostsCallback);
     }
 
