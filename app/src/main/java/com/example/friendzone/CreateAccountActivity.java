@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerLogin;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +61,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             if(response.isSuccessful()){
                 Boolean successOrNot = response.body();
                 Log.d("Resulat", String.valueOf(successOrNot));
+                finish();
             } else {
                 Log.d("Code", String.valueOf(response.code()));
             }

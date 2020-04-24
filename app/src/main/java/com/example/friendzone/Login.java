@@ -77,9 +77,4 @@ public class Login {
     public static Boolean ValidateSamePassword(String password, String ConfirmedPassword){
         return  password.equals(ConfirmedPassword);
     }
-
-
-
-
-
 }

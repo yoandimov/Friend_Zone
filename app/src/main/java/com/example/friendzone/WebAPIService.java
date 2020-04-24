@@ -1,13 +1,12 @@
 package com.example.friendzone;
 
-import com.example.friendzone.Models.Commentaire;
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.Commentaire;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -35,7 +34,7 @@ public interface WebAPIService {
     Call<Boolean> SignUp(@Body User user);
 
     @POST("api/post/create")
-    Call<Post> createPost(@Body Post post);
+    Call<Post> createPost(@Header("Authorization") String auth,@Body Post post);
 
     @POST("api/commentaire/createcommentaire")
     Call<Commentaire> CreateCommentaire(@Header("Authorization") String auth, @Body Commentaire commentaire);

@@ -1,12 +1,11 @@
 package com.example.friendzone.controller;
 
 import com.example.friendzone.Login;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.User;
 import com.example.friendzone.WebAPIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

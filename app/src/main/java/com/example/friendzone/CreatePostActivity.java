@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.ContentValues;
@@ -12,12 +11,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -29,19 +25,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.friendzone.Models.Commentaire;
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerPost;
-import com.example.friendzone.controller.ControllerUser;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,7 +59,7 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
         getSupportActionBar().setTitle("Create a post");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        controllerPost = new ControllerPost();
+        controllerPost = new ControllerPost(Login.getAuthorization(this));
 
         currentUser = User.getInstance(this);
 
@@ -178,8 +168,8 @@ public class CreatePostActivity extends AppCompatActivity {
         else {
             postTitle = title.getText().toString();
             postContent = content.getText().toString();
-            Date currentDate = Calendar.getInstance().getTime();
-            Post post = new Post(currentUser.getUserId(), currentUser.getUsername(), currentUser.getProfileImage(), postUrl, postTitle, postContent, currentDate.toString(), Image64);
+            String currentDate = Calendar.getInstance().getTime().toString();
+            Post post = new Post(currentUser.getUserId(), currentUser.getUsername(), currentUser.getProfileImage(), postUrl, postTitle, postContent,currentDate, Image64);
             Log.i("TAG", "createPost: " + post.toString());
             controllerPost.CreatePost(postCallback, post);
         }

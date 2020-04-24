@@ -26,8 +26,8 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 import com.example.friendzone.adapters.PostAdapter;
 import com.example.friendzone.controller.ControllerPost;
 import com.example.friendzone.controller.ControllerUser;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-        controllerPost = new ControllerPost();
+        controllerPost = new ControllerPost(Login.getAuthorization(this));
         controllerPost.GetAllPosts(getAllPostsCallback);
 
         toolbar = findViewById(R.id.toolbar);

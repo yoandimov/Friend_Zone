@@ -1,4 +1,4 @@
-package com.example.friendzone.Models;
+package com.example.friendzone.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -25,9 +25,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.friendzone.Models.Commentaire;
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.Commentaire;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 import com.example.friendzone.adapters.CommentAdapter;
 import com.example.friendzone.controller.ControllerCommentaire;
 import com.example.friendzone.controller.ControllerPost;
@@ -69,7 +69,6 @@ public class PostDetailsActivity extends AppCompatActivity implements View.OnCli
 
     private BroadcastReceiver receiver;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,10 +99,10 @@ public class PostDetailsActivity extends AppCompatActivity implements View.OnCli
         sendBtn = findViewById(R.id.sendBtn);
         cAvatarIv = findViewById(R.id.cAvatarIv);
 
-        controllerPost = new ControllerPost();
+        controllerPost = new ControllerPost(Login.getAuthorization(this));
         controllerPost.GetPost(getPostCallback, post_id);
 
-        controllerCommentaire = new ControllerCommentaire(this.getApplicationContext());
+        controllerCommentaire = new ControllerCommentaire(Login.getAuthorization(this));
         controllerCommentaire.GetCommentairesByPost(getCommentairesCallback, post_id);
 
         //instancier le user
@@ -132,7 +131,9 @@ public class PostDetailsActivity extends AppCompatActivity implements View.OnCli
                         String pContent = post.getContent();
                         String pImage = post.getImage();
 
+
                         uNameTv.setText(uName);
+
                         if (uImage != null) {
                             byte[] decodedStringUser = Base64.decode(uImage, Base64.DEFAULT);
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedStringUser, 0, decodedStringUser.length);
@@ -140,7 +141,9 @@ public class PostDetailsActivity extends AppCompatActivity implements View.OnCli
                         }
 
                         pTimeTv.setText(pTimeStamp);
-                        if (pTitleTv != null) {
+
+                        if (pTitle != null) {
+                            Log.d("TAG", "Title isnt null");
                             pTitleTv.setVisibility(View.VISIBLE);
                             pTitleTv.setText(pTitle);
                         }
@@ -154,6 +157,7 @@ public class PostDetailsActivity extends AppCompatActivity implements View.OnCli
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedStringPost, 0, decodedStringPost.length);
                             pImageIv.setImageBitmap(decodedByte);
                         }
+                        Log.d("TAG", "Binding: " + post.toString());
                         break;
 
                     case "com.example.friendzone.COMMENTS_RECIEVED":
@@ -289,7 +293,5 @@ public class PostDetailsActivity extends AppCompatActivity implements View.OnCli
         } else {
             Toast.makeText(PostDetailsActivity.this, "Please enter comment", Toast.LENGTH_SHORT).show();
         }
-
-        //int userId, int postId, String message, String DateCreated
     }
 }

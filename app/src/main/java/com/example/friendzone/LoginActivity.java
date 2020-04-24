@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +23,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-EditText username, password;
-Button signIn;
-TextView createAccount;
+    EditText username, password;
+    Button signIn;
+    TextView createAccount;
+    CheckBox checkbox;
+    boolean isChecked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +48,12 @@ TextView createAccount;
         signIn.setOnClickListener(this);
         createAccount.setOnClickListener(this);
 
+        checkbox = findViewById(R.id.checkbox);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.signIn:
                 ControllerLogin controllerLogin = new ControllerLogin();
                 controllerLogin.getLoginInfo(callbackLogin, this.username.getText().toString(), this.password.getText().toString());
@@ -58,7 +62,7 @@ TextView createAccount;
             case R.id.createAccount:
                 //Toast pour tester onCLick
                 Toast.makeText(LoginActivity.this, "Create Account", Toast.LENGTH_SHORT).show();
-                Intent intentCreateAccount = new Intent(this,CreateAccountActivity.class);
+                Intent intentCreateAccount = new Intent(this, CreateAccountActivity.class);
                 startActivity(intentCreateAccount);
                 break;
         }
@@ -66,14 +70,14 @@ TextView createAccount;
 
     public void validateLogin(Login login) {
 
-        if(login.getAccessToken() != null && login.getError() == null){
+        if (login.getAccessToken() != null && login.getError() == null) {
             Log.d("success", login.getAccessToken());
             String authorization = login.getTokenType() + " " + login.getAccessToken();
             setSharedPreference(authorization);
             //Toast pour tester onCLick
             Toast.makeText(LoginActivity.this, "Sign in", Toast.LENGTH_SHORT).show();
             //Intent pour ouvrir activity Main
-            Intent intentMain = new Intent(this,MainActivity.class);
+            Intent intentMain = new Intent(this, MainActivity.class);
             startActivity(intentMain);
         }
     }
@@ -81,7 +85,7 @@ TextView createAccount;
     private Callback<Login> callbackLogin = new Callback<Login>() {
         @Override
         public void onResponse(Call<Login> call, Response<Login> response) {
-            if(response.isSuccessful()) {
+            if (response.isSuccessful()) {
                 Login login = response.body();
                 validateLogin(login);
             } else {
@@ -95,12 +99,10 @@ TextView createAccount;
             Log.d("falied", t.getMessage());
         }
     };
+
     public void setSharedPreference(String authorization) {
         SharedPreferences.Editor prefs = this.getSharedPreferences(Login.AUTHORIZATION_PREF, MODE_PRIVATE).edit();
         prefs.putString(Login.AUTHORIZATION_HEADER_VALUE, authorization);
         prefs.apply();
     }
-
-
-
 }

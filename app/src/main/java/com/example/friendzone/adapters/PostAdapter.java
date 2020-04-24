@@ -13,16 +13,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.friendzone.Models.Post;
+import com.example.friendzone.models.Post;
 import com.example.friendzone.R;
+import com.example.friendzone.controller.ControllerUser;
 
 import java.util.List;
+
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     private Context mContext;
     private List<Post> mPostList;
     private OnPostClickListener mListener;
+
+    ControllerUser controllerUser;
 
     public interface OnPostClickListener {
         void onPostClick(int id);
@@ -48,13 +52,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
 
-        //int uid = mPostList.get(position).getUserId();
-        //int pid = mPostList.get(position).getPostId();
+        int uid = mPostList.get(position).getUserId();
+        int pid = mPostList.get(position).getPostId();
+        String uName = mPostList.get(position).getUsername();
+        String uProfileImage = mPostList.get(position).getProfileImage();
         String pTitle = mPostList.get(position).getTitle();
         String pTimeStamp = mPostList.get(position).getDateCreated();
         String pContent = mPostList.get(position).getContent();
         String pImage = mPostList.get(position).getImage();
 
+        holder.uNameTv.setText(uName);
+        if (uProfileImage != null) {
+            byte[] decodedString = Base64.decode(uProfileImage, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.uPictureIv.setImageBitmap(decodedByte);
+        }
         holder.pTimeTv.setText(pTimeStamp);
         if (pTitle != null) {
             holder.pTitleTv.setVisibility(View.VISIBLE);

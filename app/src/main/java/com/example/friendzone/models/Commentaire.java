@@ -1,4 +1,4 @@
-package com.example.friendzone.Models;
+package com.example.friendzone.models;
 
 public class Commentaire {
 

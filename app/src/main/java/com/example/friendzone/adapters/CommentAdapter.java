@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.friendzone.Models.Commentaire;
+import com.example.friendzone.models.Commentaire;
 import com.example.friendzone.R;
 
 import java.util.List;
