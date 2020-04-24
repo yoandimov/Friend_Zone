@@ -19,16 +19,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+
 import com.example.friendzone.models.Post;
 import com.example.friendzone.models.User;
-import com.example.friendzone.adapters.PostAdapter;
 import com.example.friendzone.controller.ControllerPost;
 import com.example.friendzone.controller.ControllerUser;
 import com.google.android.material.navigation.NavigationView;
@@ -40,7 +40,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PostAdapter.OnPostClickListener {
 
     private Toolbar toolbar;
@@ -54,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayoutManager linearLayoutManager;
     private ControllerPost controllerPost;
     private AdapterView.OnItemClickListener listener;
-
-    private BroadcastReceiver receiver;
+    private User currentUser;
 
     public static final String EXTRA_POST_ID = "post_id";
 
@@ -67,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         controllerUser = new ControllerUser(Login.getAuthorization(this));
         controllerUser.getUserInfo(userCallback);
 
+        currentUser = User.getInstance(this);
+
 
         recyclerView = findViewById(R.id.postsRecyclerView);
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-        controllerPost = new ControllerPost(Login.getAuthorization(this));
+        controllerPost = new ControllerPost();
         controllerPost.GetAllPosts(getAllPostsCallback);
 
         toolbar = findViewById(R.id.toolbar);
@@ -96,12 +96,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         registerReciever();
 
+        /*
+        NavHeaderBinding binding = DataBindingUtil.setContentView(this, R.layout.nav_header);
+        currentUser = User.getInstance(this);
+        binding.setUser(currentUser);
+
+         */
+
+
+        /*
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        NavHeaderBinding _bind = DataBindingUtil.inflate(getLayoutInflater(),
+                R.layout.nav_header,
+                binding.navView,
+                false);
+        binding.navView.addHeaderView(_bind.getRoot());
+        currentUser = User.getInstance(this);
+        _bind.setUser(currentUser);
+
+         */
+
+
+
     }
 
     private void registerReciever() {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.friendzone.POSTS_UPDATED");
-        receiver = new BroadcastReceiver() {
+        BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
@@ -120,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 return;
             }
-            registerReciever();
             postList = response.body();
 
             String broadcast = "com.example.friendzone.POSTS_UPDATED";
@@ -165,8 +186,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else {
             super.onBackPressed();
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -179,7 +202,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.nav_profile:
+                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, UserProfileActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.nav_settings:
+                recyclerView.setVisibility(View.GONE);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsScreen())
                         .addToBackStack(null)
                         .commit();
@@ -200,11 +230,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private Callback<User> userCallback = new Callback<User>() {
+        @Override
+        public void onResponse(Call<User> call, Response<User> response) {
+            if (response.isSuccessful()) {
+                User user = response.body();
+                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
+
+                SharedPreferences.Editor prefs = getApplicationContext().getSharedPreferences
+                        ("user", MODE_PRIVATE)
+                        .edit();
+
+                Gson gson = new Gson();
+                String json = gson.toJson(user);
+                prefs.putString("currentUser", json);
+                prefs.commit();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<User> call, Throwable t) {
+
+        }
+    };
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        unregisterReceiver(receiver);
+
         controllerPost.GetAllPosts(getAllPostsCallback);
     }
 
@@ -226,31 +280,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private Callback<User> userCallback = new Callback<User>() {
-        @Override
-        public void onResponse(Call<User> call, Response<User> response) {
-            if(response.isSuccessful()) {
-                User user = response.body();
-                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
-                Log.d("User", str);
-
-                SharedPreferences.Editor prefs = getApplicationContext().getSharedPreferences
-                        ("user", MODE_PRIVATE)
-                        .edit();
-
-                Gson gson = new Gson();
-                String json = gson.toJson(user);
-                prefs.putString("currentUser", json);
-                prefs.commit();
-            }
-        }
-
-        @Override
-        public void onFailure(Call<User> call, Throwable t) {
-
-        }
-    };
-
-
 }

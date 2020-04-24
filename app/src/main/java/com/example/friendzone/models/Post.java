@@ -2,6 +2,8 @@ package com.example.friendzone.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 public class Post {
     private Integer PostId;
     private int UserId;
@@ -100,6 +102,6 @@ public class Post {
     @NonNull
     @Override
     public String toString() {
-        return "Id: " + PostId +"Title: " + Title + " ;Content: " + Content + " ;Image: " + Image + " ;Data created: " ;
+        return "Id: " + PostId +"Title: " + Title + " ;Content: " + Content + " ;Image: " + Image + " ;Data created: " + DateCreated;
     }
 }

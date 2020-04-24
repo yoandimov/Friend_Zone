@@ -27,17 +27,14 @@ public interface WebAPIService {
     @GET("api/user/getUser")
     Call<User> getUser(@Header("Authorization") String auth);
 
-    @GET("api/user/getUser{id}")
-    Call<User> getUser(@Path("id")int id);
-
     @POST("api/auth/signUp")
     Call<Boolean> SignUp(@Body User user);
 
     @POST("api/post/create")
-    Call<Post> createPost(@Header("Authorization") String auth,@Body Post post);
+    Call<Post> createPost(@Body Post post);
 
     @POST("api/commentaire/createcommentaire")
-    Call<Commentaire> CreateCommentaire(@Header("Authorization") String auth, @Body Commentaire commentaire);
+    Call<Commentaire> CreateCommentaire(@Body Commentaire commentaire);
 
     @GET ("api/post/get/{id}")
     Call<Post> getPost(@Path("id")int id);
@@ -45,7 +42,9 @@ public interface WebAPIService {
     @GET("api/post/getall")
     Call<List<Post>> getAllPosts();
 
-    @GET("api/commentaire/GetCommentairesByPost/{id}")
-    Call<List<Commentaire>> getCommentairesByPost(@Header("Authorization") String auth, @Path("id")int id);
+    @GET("api/user/getuserpost")
+    Call<List<Post>> getPostsByUser(@Header("Authorization") String auth);
 
+    @POST("api/user/updateprofile")
+    Call<Boolean> updateProfile(@Header("Authorization") String auth, @Body User user);
 }
