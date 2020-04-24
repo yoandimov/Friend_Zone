@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/addImageOption"
+        android:title="Add Image"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_image"
+        ></item>
+
+    <item
+        android:id="@+id/takePictureOption"
+        android:title="Take Picture"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_add_a_photo"
+        ></item>
+
+    <item
+        android:id="@+id/postOption"
+        android:title="POST"
+        app:showAsAction="always"
+        ></item>
+</menu>
