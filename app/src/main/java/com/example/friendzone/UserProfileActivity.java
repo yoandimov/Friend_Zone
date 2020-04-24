@@ -188,8 +188,10 @@ public class UserProfileActivity extends AppCompatActivity implements PostAdapte
 
     public void displayUserInfo() {
         username.setText("@" + currentUser.getUsername());
-        fullname.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
 
+        if(currentUser.getFirstName() != null) {
+            fullname.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+        }
         if(currentUser.getDescription() != null) {
             bio.setText(currentUser.getDescription());
         }
