@@ -7,8 +7,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.adapters.ActionMenuViewBindingAdapter;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,9 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.example.friendzone.databinding.ActivityMainBinding;
-import com.example.friendzone.databinding.NavHeaderBinding;
-import com.example.friendzone.databinding.NavHeaderBindingImpl;
+
 import com.example.friendzone.models.Post;
 import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerPost;
