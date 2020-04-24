@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         controllerUser = new ControllerUser(Login.getAuthorization(this));
         controllerUser.getUserInfo(userCallback);
 
+        currentUser = User.getInstance(this);
+
 
         recyclerView = findViewById(R.id.postsRecyclerView);
 
