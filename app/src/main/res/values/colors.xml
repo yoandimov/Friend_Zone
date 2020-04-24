@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="loginColor">#c8f7ff</color>
+    <color name="profileBannerColor">#33b5e5</color>
     <color name="colorDarker">#72d5d7</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
