@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -27,9 +28,11 @@ import android.widget.Toast;
 
 import com.example.friendzone.Models.Post;
 import com.example.friendzone.Models.User;
+import com.example.friendzone.adapters.PostAdapter;
 import com.example.friendzone.controller.ControllerPost;
 import com.example.friendzone.controller.ControllerUser;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PostAdapter.OnPostClickListener {
 
     private Toolbar toolbar;
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayoutManager linearLayoutManager;
     private ControllerPost controllerPost;
     private AdapterView.OnItemClickListener listener;
+
+    private BroadcastReceiver receiver;
 
     public static final String EXTRA_POST_ID = "post_id";
 
@@ -95,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void registerReciever() {
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.friendzone.POSTS_UPDATED");
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 postAdapter = new PostAdapter(getApplicationContext(), postList);
@@ -114,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 return;
             }
+            registerReciever();
             postList = response.body();
 
             String broadcast = "com.example.friendzone.POSTS_UPDATED";
@@ -193,27 +200,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private Callback<User> userCallback = new Callback<User>() {
-        @Override
-        public void onResponse(Call<User> call, Response<User> response) {
-            if (response.isSuccessful()) {
-                User user = response.body();
-                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
-
-            }
-        }
-
-        @Override
-        public void onFailure(Call<User> call, Throwable t) {
-
-        }
-    };
-
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        unregisterReceiver(receiver);
         controllerPost.GetAllPosts(getAllPostsCallback);
     }
 
@@ -235,4 +226,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private Callback<User> userCallback = new Callback<User>() {
+        @Override
+        public void onResponse(Call<User> call, Response<User> response) {
+            if(response.isSuccessful()) {
+                User user = response.body();
+                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
+                Log.d("User", str);
+
+                SharedPreferences.Editor prefs = getApplicationContext().getSharedPreferences
+                        ("user", MODE_PRIVATE)
+                        .edit();
+
+                Gson gson = new Gson();
+                String json = gson.toJson(user);
+                prefs.putString("currentUser", json);
+                prefs.commit();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<User> call, Throwable t) {
+
+        }
+    };
+
+
 }

@@ -29,8 +29,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.friendzone.Models.Commentaire;
 import com.example.friendzone.Models.Post;
+import com.example.friendzone.Models.User;
 import com.example.friendzone.controller.ControllerPost;
+import com.example.friendzone.controller.ControllerUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,6 +41,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +49,6 @@ import retrofit2.Response;
 
 public class CreatePostActivity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 1000;
-    int userId = 1; //test id is 1
     String postUrl = "urltest"; //test posturl
     String postTitle;
     String postContent;
@@ -53,11 +56,10 @@ public class CreatePostActivity extends AppCompatActivity {
     Uri image_uri;
 
     private ControllerPost controllerPost;
+    private User currentUser;
 
     EditText title, content;
     ImageView imageView;
-
-
     private int PICK_IMAGE_REQUEST = 1;
     private int TAKE_PICTURE_REQUEST = 10;
 
@@ -69,11 +71,11 @@ public class CreatePostActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         controllerPost = new ControllerPost();
 
+        currentUser = User.getInstance(this);
+
         title = findViewById(R.id.title);
         content = findViewById(R.id.content);
         imageView = findViewById(R.id.imageView);
-
-
     }
 
     @Override
@@ -87,7 +89,6 @@ public class CreatePostActivity extends AppCompatActivity {
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
                 imageView.setVisibility(View.VISIBLE);
                 imageView.setImageBitmap(bitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -178,7 +179,7 @@ public class CreatePostActivity extends AppCompatActivity {
             postTitle = title.getText().toString();
             postContent = content.getText().toString();
             Date currentDate = Calendar.getInstance().getTime();
-            Post post = new Post(userId, postUrl, postTitle, postContent, Image64, currentDate.toString());
+            Post post = new Post(currentUser.getUserId(), currentUser.getUsername(), currentUser.getProfileImage(), postUrl, postTitle, postContent, currentDate.toString(), Image64);
             Log.i("TAG", "createPost: " + post.toString());
             controllerPost.CreatePost(postCallback, post);
         }
@@ -188,7 +189,6 @@ public class CreatePostActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<Post> call, Response<Post> response) {
             if (!response.isSuccessful()) {
-                Log.d("PostResult", "onResponse: " + response.code());
                 return;
             }
             Toast.makeText(CreatePostActivity.this, "Posted", Toast.LENGTH_SHORT).show();
@@ -237,7 +237,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 return true;
             //Post
             case R.id.postOption:
-               createPost();
+                createPost();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

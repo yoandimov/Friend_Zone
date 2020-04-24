@@ -1,4 +1,4 @@
-package com.example.friendzone;
+package com.example.friendzone.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.friendzone.Models.Post;
+import com.example.friendzone.R;
 
 import java.util.List;
 
@@ -54,7 +55,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         String pContent = mPostList.get(position).getContent();
         String pImage = mPostList.get(position).getImage();
 
-
         holder.pTimeTv.setText(pTimeStamp);
         if (pTitle != null) {
             holder.pTitleTv.setVisibility(View.VISIBLE);
@@ -70,7 +70,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.pImageIv.setImageBitmap(decodedByte);
         }
-
     }
 
     @Override
