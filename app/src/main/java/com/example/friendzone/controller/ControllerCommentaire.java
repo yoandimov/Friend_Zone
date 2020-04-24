@@ -1,6 +1,6 @@
 package com.example.friendzone.controller;
 
-import com.example.friendzone.Models.Commentaire;
+import com.example.friendzone.models.Commentaire;
 import com.example.friendzone.WebAPIService;
 
 import retrofit2.Call;

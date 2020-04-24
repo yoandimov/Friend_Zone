@@ -1,4 +1,4 @@
-package com.example.friendzone.Models;
+package com.example.friendzone.models;
 
 import androidx.annotation.NonNull;
 
@@ -7,22 +7,39 @@ import java.util.List;
 public class Post {
     private Integer PostId;
     private int UserId;
+    private String username;
+    private String profileImage;
     private String PostUrl;
     private String Title;
     private String Content;
     private String DateCreated;
-
     private String Image;
 
-    private List<Commentaire> PostCommentaires;
-
-    public Post(int userId, String postUrl, String title, String content, String image, String postDate) {
-        this.UserId = userId;
+    public Post(int userId, String uName, String profileImage, String postUrl, String title, String content, String dateCreated, String image) {
+        UserId = userId;
+        this.username = uName;
+        this.profileImage = profileImage;
         PostUrl = postUrl;
         Title = title;
         Content = content;
+        DateCreated = dateCreated;
         Image = image;
-        DateCreated = postDate;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public int getPostId() {
@@ -81,17 +98,10 @@ public class Post {
         DateCreated = dateCreated;
     }
 
-    public List<Commentaire> getPostCommentaires() {
-        return PostCommentaires;
-    }
-
-    public void setPostCommentaires(List<Commentaire> postCommentaires) {
-        PostCommentaires = postCommentaires;
-    }
 
     @NonNull
     @Override
     public String toString() {
-        return "Title: " + Title + " ;Content: " + Content + " ;Image: " + Image + " ;Data created: " + DateCreated;
+        return "Id: " + PostId +"Title: " + Title + " ;Content: " + Content + " ;Image: " + Image + " ;Data created: " + DateCreated;
     }
 }

@@ -1,13 +1,12 @@
 package com.example.friendzone;
 
-import com.example.friendzone.Models.Commentaire;
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.Commentaire;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

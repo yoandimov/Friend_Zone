@@ -7,6 +7,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.adapters.ActionMenuViewBindingAdapter;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +21,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,8 +28,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.databinding.ActivityMainBinding;
+import com.example.friendzone.databinding.NavHeaderBinding;
+import com.example.friendzone.databinding.NavHeaderBindingImpl;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerPost;
 import com.example.friendzone.controller.ControllerUser;
 import com.google.android.material.navigation.NavigationView;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayoutManager linearLayoutManager;
     private ControllerPost controllerPost;
     private AdapterView.OnItemClickListener listener;
+    private User currentUser;
 
     public static final String EXTRA_POST_ID = "post_id";
 
@@ -92,6 +97,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         registerReciever();
+
+        /*
+        NavHeaderBinding binding = DataBindingUtil.setContentView(this, R.layout.nav_header);
+        currentUser = User.getInstance(this);
+        binding.setUser(currentUser);
+
+         */
+
+
+        /*
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        NavHeaderBinding _bind = DataBindingUtil.inflate(getLayoutInflater(),
+                R.layout.nav_header,
+                binding.navView,
+                false);
+        binding.navView.addHeaderView(_bind.getRoot());
+        currentUser = User.getInstance(this);
+        _bind.setUser(currentUser);
+
+         */
+
+
 
     }
 

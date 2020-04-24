@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerUser;
 import com.google.gson.Gson;
 

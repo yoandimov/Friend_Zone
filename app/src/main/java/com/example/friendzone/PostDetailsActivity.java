@@ -23,8 +23,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.friendzone.Models.Commentaire;
-import com.example.friendzone.Models.Post;
+import com.example.friendzone.models.Commentaire;
+import com.example.friendzone.models.Post;
 import com.example.friendzone.controller.ControllerCommentaire;
 import com.example.friendzone.controller.ControllerPost;
 

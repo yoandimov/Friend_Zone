@@ -1,8 +1,7 @@
 package com.example.friendzone.controller;
 
-import com.example.friendzone.Login;
-import com.example.friendzone.Models.Post;
-import com.example.friendzone.Models.User;
+import com.example.friendzone.models.Post;
+import com.example.friendzone.models.User;
 import com.example.friendzone.WebAPIService;
 
 import java.util.List;
