@@ -70,7 +70,7 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
         getSupportActionBar().setTitle("Create a post");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        controllerPost = new ControllerPost();
+        controllerPost = new ControllerPost(Login.getAuthorization(this));
 
         currentUser = User.getInstance(this);
 

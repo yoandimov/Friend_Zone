@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.friendzone.adapters.PostAdapter;
 import com.example.friendzone.models.Post;
 import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerUser;

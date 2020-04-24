@@ -31,10 +31,10 @@ public interface WebAPIService {
     Call<Boolean> SignUp(@Body User user);
 
     @POST("api/post/create")
-    Call<Post> createPost(@Body Post post);
+    Call<Post> createPost(@Header("Authorization") String auth, @Body Post post);
 
     @POST("api/commentaire/createcommentaire")
-    Call<Commentaire> CreateCommentaire(@Body Commentaire commentaire);
+    Call<Commentaire> CreateCommentaire(@Header("Authorization") String auth,@Body Commentaire commentaire);
 
     @GET ("api/post/get/{id}")
     Call<Post> getPost(@Path("id")int id);
@@ -47,4 +47,7 @@ public interface WebAPIService {
 
     @POST("api/user/updateprofile")
     Call<Boolean> updateProfile(@Header("Authorization") String auth, @Body User user);
+
+    @GET("api/commentaire/GetCommentairesByPost/{id}")
+    Call<List<Commentaire>> getCommentairesByPost(@Header("Authorization") String auth, @Path("id")int id);
 }

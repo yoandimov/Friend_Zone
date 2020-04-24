@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 
+import com.example.friendzone.adapters.PostAdapter;
 import com.example.friendzone.models.Post;
 import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerPost;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-        controllerPost = new ControllerPost();
+        controllerPost = new ControllerPost(Login.getAuthorization(this));
         controllerPost.GetAllPosts(getAllPostsCallback);
 
         toolbar = findViewById(R.id.toolbar);
@@ -115,9 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _bind.setUser(currentUser);
 
          */
-
-
-
     }
 
     private void registerReciever() {
@@ -175,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(postDetailsIntent);
         }
     }
-
 
     /**
      * ANDROID BACK BUTTON ACTION
