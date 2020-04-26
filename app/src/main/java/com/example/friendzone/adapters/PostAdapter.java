@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.friendzone.databinding.RowPostBinding;
 import com.example.friendzone.models.Post;
 import com.example.friendzone.R;
 import com.example.friendzone.controller.ControllerUser;
@@ -41,47 +43,48 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         mContext = context;
     }
 
+
+
     @NonNull
     @Override
     public PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.row_post, parent, false);
-
-        return new PostHolder(view);
+        RowPostBinding postListItemBinding =
+                DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                        R.layout.row_post, parent, false);
+        return new PostHolder(postListItemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostHolder holder, int position) {
 
-        int uid = mPostList.get(position).getUserId();
-        int pid = mPostList.get(position).getPostId();
-        String uName = mPostList.get(position).getUsername();
-        String uProfileImage = mPostList.get(position).getProfileImage();
-        String pTitle = mPostList.get(position).getTitle();
-        String pTimeStamp = mPostList.get(position).getDateCreated();
-        String pContent = mPostList.get(position).getContent();
-        String pImage = mPostList.get(position).getImage();
-
-        holder.uNameTv.setText(uName);
-        if (uProfileImage != null) {
-            byte[] decodedString = Base64.decode(uProfileImage, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            holder.uPictureIv.setImageBitmap(decodedByte);
-        }
-        holder.pTimeTv.setText(pTimeStamp);
-        if (pTitle != null) {
-            holder.pTitleTv.setVisibility(View.VISIBLE);
-            holder.pTitleTv.setText(pTitle);
-        }
-        if (pContent != null) {
-            holder.pDescriptionTv.setVisibility(View.VISIBLE);
-            holder.pDescriptionTv.setText(pContent);
-        }
-        if (pImage != null) {
-            holder.pImageIv.setVisibility(View.VISIBLE);
-            byte[] decodedString = Base64.decode(pImage, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            holder.pImageIv.setImageBitmap(decodedByte);
-        }
+//        int uid = mPostList.get(position).getUserId();
+//        int pid = mPostList.get(position).getPostId();
+//        String uName = mPostList.get(position).getUsername();
+//        String uProfileImage = mPostList.get(position).getProfileImage();
+//        String pTitle = mPostList.get(position).getTitle();
+//        String pTimeStamp = mPostList.get(position).getDateCreated();
+//        String pContent = mPostList.get(position).getContent();
+//        String pImage = mPostList.get(position).getImage();
+        Post currentPost = mPostList.get(position);
+        holder.postListItemBinding.setPost(currentPost);
+//        holder.uNameTv.setText(uName);
+//        if (uProfileImage != null) {
+//            byte[] decodedString = Base64.decode(uProfileImage, Base64.DEFAULT);
+//            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//            holder.uPictureIv.setImageBitmap(decodedByte);
+//        }
+//        holder.pTimeTv.setText(pTimeStamp);
+//        if (pTitle != null) {
+//            holder.pTitleTv.setVisibility(View.VISIBLE);
+//            holder.pTitleTv.setText(pTitle);
+//        }
+//        if (pContent != null) {
+//            holder.pDescriptionTv.setVisibility(View.VISIBLE);
+//            holder.pDescriptionTv.setText(pContent);
+//        }
+//        if (pImage != null) {
+//
+//        }
     }
 
     @Override
@@ -91,18 +94,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
 
     class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView uPictureIv, pImageIv;
-        TextView uNameTv, pTimeTv, pTitleTv, pDescriptionTv;
+//        ImageView uPictureIv, pImageIv;
+//        TextView uNameTv, pTimeTv, pTitleTv, pDescriptionTv;
+        private RowPostBinding postListItemBinding;
 
-        public PostHolder(@NonNull View itemView) {
-            super(itemView);
-
-            uPictureIv = itemView.findViewById(R.id.uPictureIv);
-            pImageIv = itemView.findViewById(R.id.pImageIv);
-            uNameTv = itemView.findViewById(R.id.uNameTv);
-            pTimeTv = itemView.findViewById(R.id.pTimeTv);
-            pTitleTv = itemView.findViewById(R.id.pTitleTv);
-            pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);
+        public PostHolder(@NonNull RowPostBinding postListItemBinding) {
+            super(postListItemBinding.getRoot());
+            this.postListItemBinding = postListItemBinding;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,6 +114,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                 }
             });
         }
+//
+//        public PostHolder(@NonNull View itemView) {
+//            super(itemView);
+//
+//            uPictureIv = itemView.findViewById(R.id.uPictureIv);
+//            pImageIv = itemView.findViewById(R.id.pImageIv);
+//            uNameTv = itemView.findViewById(R.id.uNameTv);
+//            pTimeTv = itemView.findViewById(R.id.pTimeTv);
+//            pTitleTv = itemView.findViewById(R.id.pTitleTv);
+//            pDescriptionTv = itemView.findViewById(R.id.pDescriptionTv);
+//
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mListener != null) {
+//                        int position = getAdapterPosition();
+//                        if (position != RecyclerView.NO_POSITION) {
+//                            mListener.onPostClick(position);
+//                        }
+//                    }
+//                }
+//            });
+//        }
 
         @Override
         public void onClick(View v) {

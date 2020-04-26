@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-    private ControllerUser controllerUser;
+
     private RecyclerView recyclerView;
     private List<Post> postList = new ArrayList<>();
     private PostAdapter postAdapter;
@@ -63,9 +63,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        controllerUser = new ControllerUser(Login.getAuthorization(this));
-        controllerUser.getUserInfo(userCallback);
 
         currentUser = User.getInstance(this);
 
@@ -227,29 +224,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private Callback<User> userCallback = new Callback<User>() {
-        @Override
-        public void onResponse(Call<User> call, Response<User> response) {
-            if (response.isSuccessful()) {
-                User user = response.body();
-                String str = String.format("%d %s %s %s", user.userId, user.getFirstName(), user.getUsername(), user.getEmail());
-
-                SharedPreferences.Editor prefs = getApplicationContext().getSharedPreferences
-                        ("user", MODE_PRIVATE)
-                        .edit();
-
-                Gson gson = new Gson();
-                String json = gson.toJson(user);
-                prefs.putString("currentUser", json);
-                prefs.commit();
-            }
-        }
-
-        @Override
-        public void onFailure(Call<User> call, Throwable t) {
-
-        }
-    };
 
 
     @Override

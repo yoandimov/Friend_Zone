@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.friendzone.models.Commentaire;
 import com.example.friendzone.R;
 
@@ -48,9 +50,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
         holder.nameTv.setText(uName);
         if (uImage != null) {
-            byte[] decodedString = Base64.decode(uImage, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            holder.avatarIv.setImageBitmap(decodedByte);
+            if(uImage.contains("https://")){
+                Glide.with(holder.avatarIv.getContext())
+                        .setDefaultRequestOptions(new RequestOptions()
+                                .circleCrop())
+                        .load(uImage)
+                        .into(holder.avatarIv);
+            } else {
+                byte[] decodedString = Base64.decode(uImage, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.avatarIv.setImageBitmap(decodedByte);
+            }
         }
         //holder.timeTv.setText(timeStamp);
         holder.commentTv.setText(message);

@@ -2,6 +2,8 @@ package com.example.friendzone;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.friendzone.models.User;
 import com.example.friendzone.controller.ControllerLogin;
@@ -21,7 +24,9 @@ import retrofit2.Response;
 public class CreateAccountActivity extends AppCompatActivity {
     private EditText username, password, confirmedPassword, email;
     private final  String EMPTY_FIELD_ERROR = "This field Cannot be empty";
+    public static  final  String RESULT = "result";
     private ControllerLogin controllerLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,15 +60,19 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
     private Callback<Boolean> booleanCallback = new Callback<Boolean>() {
         @Override
         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
             if(response.isSuccessful()){
                 Boolean successOrNot = response.body();
                 Log.d("Resulat", String.valueOf(successOrNot));
-                finish();
+                returnResult(true);
             } else {
                 Log.d("Code", String.valueOf(response.code()));
+                Toast.makeText(getApplicationContext(),"Registration failed pls contact support",Toast.LENGTH_SHORT).show();
+                returnResult(false);
             }
         }
 
@@ -72,6 +81,13 @@ public class CreateAccountActivity extends AppCompatActivity {
             Log.d("error", t.getMessage());
         }
     };
+
+    public void returnResult(Boolean isRegistered){
+        Intent intent = new Intent();
+        intent.putExtra(RESULT, isRegistered);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
 
     public void SignUp(View v){
         if(checkEmptyField()) {
